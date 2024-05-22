@@ -29,6 +29,7 @@ from .core.const import (
     CLUSTER_HANDLER_ON_OFF,
     CLUSTER_HANDLER_ZONE,
     ENTITY_METADATA,
+    ENTITY_METADATA_INDEX,
     SIGNAL_ADD_ENTITIES,
     SIGNAL_ATTR_UPDATED,
 )
@@ -83,12 +84,16 @@ class BinarySensor(ZhaEntity, BinarySensorEntity):
         """Initialize the ZHA binary sensor."""
         self._cluster_handler = cluster_handlers[0]
         if ENTITY_METADATA in kwargs:
-            self._init_from_quirks_metadata(kwargs[ENTITY_METADATA])
+            self._init_from_quirks_metadata(
+                kwargs[ENTITY_METADATA], kwargs[ENTITY_METADATA_INDEX]
+            )
         super().__init__(unique_id, zha_device, cluster_handlers, **kwargs)
 
-    def _init_from_quirks_metadata(self, entity_metadata: BinarySensorMetadata) -> None:
+    def _init_from_quirks_metadata(
+        self, entity_metadata: BinarySensorMetadata, entity_index: int
+    ) -> None:
         """Init this entity from the quirks metadata."""
-        super()._init_from_quirks_metadata(entity_metadata)
+        super()._init_from_quirks_metadata(entity_metadata, entity_index)
         self._attribute_name = entity_metadata.attribute_name
         if entity_metadata.device_class is not None:
             self._attr_device_class = validate_device_class(

@@ -174,7 +174,9 @@ class ZhaEntity(BaseZhaEntity, RestoreEntity):
         """
         return cls(unique_id, zha_device, cluster_handlers, **kwargs)
 
-    def _init_from_quirks_metadata(self, entity_metadata: EntityMetadata) -> None:
+    def _init_from_quirks_metadata(
+        self, entity_metadata: EntityMetadata, entity_index: int
+    ) -> None:
         """Init this entity from the quirks metadata."""
         if entity_metadata.initially_disabled:
             self._attr_entity_registry_enabled_default = False
@@ -192,9 +194,13 @@ class ZhaEntity(BaseZhaEntity, RestoreEntity):
             elif has_command_name:
                 self._attr_translation_key = entity_metadata.command_name
         if has_attribute_name:
-            self._unique_id_suffix = entity_metadata.attribute_name
+            self._unique_id_suffix = (
+                str(entity_index) + "-" + entity_metadata.attribute_name
+            )
         elif has_command_name:
-            self._unique_id_suffix = entity_metadata.command_name
+            self._unique_id_suffix = (
+                str(entity_index) + "-" + entity_metadata.command_name
+            )
         if entity_metadata.entity_type is EntityType.CONFIG:
             self._attr_entity_category = EntityCategory.CONFIG
         elif entity_metadata.entity_type is EntityType.DIAGNOSTIC:

@@ -272,7 +272,9 @@ class ProbeEndpoint:
             )
             assert cluster_handler
 
-            for entity_metadata in entity_metadata_list:
+            for entity_metadata_index, entity_metadata in enumerate(
+                entity_metadata_list
+            ):
                 platform = Platform(entity_metadata.entity_platform.value)
                 metadata_type = type(entity_metadata)
                 entity_class = QUIRKS_ENTITY_META_TO_ENTITY_CLASS.get(
@@ -311,6 +313,7 @@ class ProbeEndpoint:
                     endpoint.unique_id,
                     [cluster_handler],
                     entity_metadata=entity_metadata,
+                    entity_metadata_index=entity_metadata_index,
                 )
 
                 _LOGGER.debug(

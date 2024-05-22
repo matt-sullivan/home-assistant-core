@@ -16,7 +16,12 @@ from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .core import discovery
-from .core.const import CLUSTER_HANDLER_IDENTIFY, ENTITY_METADATA, SIGNAL_ADD_ENTITIES
+from .core.const import (
+    CLUSTER_HANDLER_IDENTIFY,
+    ENTITY_METADATA,
+    ENTITY_METADATA_INDEX,
+    SIGNAL_ADD_ENTITIES,
+)
 from .core.helpers import get_zha_data
 from .core.registries import ZHA_ENTITIES
 from .entity import ZhaEntity
@@ -73,14 +78,16 @@ class ZHAButton(ZhaEntity, ButtonEntity):
         """Init this button."""
         self._cluster_handler: ClusterHandler = cluster_handlers[0]
         if ENTITY_METADATA in kwargs:
-            self._init_from_quirks_metadata(kwargs[ENTITY_METADATA])
+            self._init_from_quirks_metadata(
+                kwargs[ENTITY_METADATA], kwargs[ENTITY_METADATA_INDEX]
+            )
         super().__init__(unique_id, zha_device, cluster_handlers, **kwargs)
 
     def _init_from_quirks_metadata(
-        self, entity_metadata: ZCLCommandButtonMetadata
+        self, entity_metadata: ZCLCommandButtonMetadata, entity_index: int
     ) -> None:
         """Init this entity from the quirks metadata."""
-        super()._init_from_quirks_metadata(entity_metadata)
+        super()._init_from_quirks_metadata(entity_metadata, entity_index)
         self._command_name = entity_metadata.command_name
         self._args = entity_metadata.args
         self._kwargs = entity_metadata.kwargs
@@ -146,14 +153,16 @@ class ZHAAttributeButton(ZhaEntity, ButtonEntity):
         """Init this button."""
         self._cluster_handler: ClusterHandler = cluster_handlers[0]
         if ENTITY_METADATA in kwargs:
-            self._init_from_quirks_metadata(kwargs[ENTITY_METADATA])
+            self._init_from_quirks_metadata(
+                kwargs[ENTITY_METADATA], kwargs[ENTITY_METADATA_INDEX]
+            )
         super().__init__(unique_id, zha_device, cluster_handlers, **kwargs)
 
     def _init_from_quirks_metadata(
-        self, entity_metadata: WriteAttributeButtonMetadata
+        self, entity_metadata: WriteAttributeButtonMetadata, entity_index: int
     ) -> None:
         """Init this entity from the quirks metadata."""
-        super()._init_from_quirks_metadata(entity_metadata)
+        super()._init_from_quirks_metadata(entity_metadata, entity_index)
         self._attribute_name = entity_metadata.attribute_name
         self._attribute_value = entity_metadata.attribute_value
 

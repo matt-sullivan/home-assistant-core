@@ -72,6 +72,7 @@ from .core.const import (
     CLUSTER_HANDLER_THERMOSTAT,
     DATA_ZHA,
     ENTITY_METADATA,
+    ENTITY_METADATA_INDEX,
     SIGNAL_ADD_ENTITIES,
     SIGNAL_ATTR_UPDATED,
 )
@@ -177,12 +178,16 @@ class Sensor(ZhaEntity, SensorEntity):
         """Init this sensor."""
         self._cluster_handler: ClusterHandler = cluster_handlers[0]
         if ENTITY_METADATA in kwargs:
-            self._init_from_quirks_metadata(kwargs[ENTITY_METADATA])
+            self._init_from_quirks_metadata(
+                kwargs[ENTITY_METADATA], kwargs[ENTITY_METADATA_INDEX]
+            )
         super().__init__(unique_id, zha_device, cluster_handlers, **kwargs)
 
-    def _init_from_quirks_metadata(self, entity_metadata: ZCLSensorMetadata) -> None:
+    def _init_from_quirks_metadata(
+        self, entity_metadata: ZCLSensorMetadata, entity_index: int
+    ) -> None:
         """Init this entity from the quirks metadata."""
-        super()._init_from_quirks_metadata(entity_metadata)
+        super()._init_from_quirks_metadata(entity_metadata, entity_index)
         self._attribute_name = entity_metadata.attribute_name
         if entity_metadata.divisor is not None:
             self._divisor = entity_metadata.divisor
@@ -374,9 +379,11 @@ class EnumSensor(Sensor):
         super().__init__(unique_id, zha_device, cluster_handlers, **kwargs)
         self._attr_options = [e.name for e in self._enum]
 
-    def _init_from_quirks_metadata(self, entity_metadata: ZCLEnumMetadata) -> None:
+    def _init_from_quirks_metadata(
+        self, entity_metadata: ZCLEnumMetadata, entity_index: int
+    ) -> None:
         """Init this entity from the quirks metadata."""
-        ZhaEntity._init_from_quirks_metadata(self, entity_metadata)  # noqa: SLF001
+        ZhaEntity._init_from_quirks_metadata(self, entity_metadata, entity_index)  # noqa: SLF001
         self._attribute_name = entity_metadata.attribute_name
         self._enum = entity_metadata.enum
 

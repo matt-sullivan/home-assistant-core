@@ -221,6 +221,7 @@ DISCOVERY_KEY = "zha_discovery_info"
 DOMAIN = "zha"
 
 ENTITY_METADATA = "entity_metadata"
+ENTITY_METADATA_INDEX = "entity_metadata_index"
 
 GROUP_ID = "group_id"
 GROUP_IDS = "group_ids"
