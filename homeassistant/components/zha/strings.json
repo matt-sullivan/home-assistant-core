@@ -583,6 +583,24 @@
       },
       "self_test": {
         "name": "Self-test"
+      },
+      "small_step_open": {
+        "name": "Small step open"
+      },
+      "small_step_close": {
+        "name": "Small step close"
+      },
+      "set_open_limit": {
+        "name": "Set open limit"
+      },
+      "set_close_limit": {
+        "name": "Set close limit"
+      },
+      "clear_open_limit": {
+        "name": "Clear open limit"
+      },
+      "clear_close_limit": {
+        "name": "Clear close limit"
       }
     },
     "climate": {
@@ -810,6 +828,9 @@
       },
       "keypad_lockout": {
         "name": "Keypad lockout"
+      },
+      "motor_direction": {
+        "name": "Motor direction"
       }
     },
     "sensor": {
